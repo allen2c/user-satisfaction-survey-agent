@@ -1,20 +1,26 @@
 [project]
 authors = [{ name = "Allen Chou", email = "f1470891079@gmail.com" }]
-dependencies = ["dictpress (>=0.3.0)", "pydantic (>=2)", "str-or-none"]
-description = "AllenChou's Python template."
+dependencies = [
+  "dictpress (>=0.3.0)",
+  "openai-agents>=0.1.0,<1",
+  "openai>=1,<2",
+  "pydantic (>=2)",
+  "str-or-none",
+]
+description = "User Satisfaction Survey Agent"
 license = { text = "MIT" }
-name = "ac-py-template"
+name = "user-satisfaction-survey-agent"
 readme = "README.md"
 requires-python = ">=3.11,<4"
 version = "0.1.0"
 
 [project.urls]
-Homepage = "https://github.com/allen2c/ac-py-template"
-"PyPI" = "https://pypi.org/project/ac-py-template/"
-Repository = "https://github.com/allen2c/ac-py-template"
+Homepage = "https://github.com/allen2c/user-satisfaction-survey-agent"
+"PyPI" = "https://pypi.org/project/user-satisfaction-survey-agent/"
+Repository = "https://github.com/allen2c/user-satisfaction-survey-agent"
 
 [tool.poetry]
-packages = [{ include = "ac_py_template" }]
+packages = [{ include = "user_satisfaction_survey_agent" }]
 
 [tool.poetry.extras]
 all = []
