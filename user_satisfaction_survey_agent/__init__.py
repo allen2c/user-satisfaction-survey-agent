@@ -26,12 +26,82 @@ DEFAULT_MODEL = "gpt-4.1-nano"
 
 
 class UserSatisfactionSurveyAgent:
-    instructions: str = textwrap.dedent(
+    agent_instructions_sentiment_metrics: str = textwrap.dedent(
         """
+        ## Role Instructions
+
+        You are a customer experience analyst. Analyze user sentiment from customer service conversations.
+        Your goal is to Review the conversation and identify each distinct user sentiment moment.
+
+        ## Output Format Rules
+
+        For each user sentiment, output: `[user_message_summary](#SENTIMENT)`
+
+        SENTIMENT options: POSITIVE, NEGATIVE, NEUTRAL
+
+        ## Examples
+
+        ### Example 1
+
+        user:
+        Hello
+
+        assistant:
+        Hello, how can I help you today?
+
+        user:
+        I'm having trouble with my account.
+
+        assistant:
+        I'm sorry to hear that. How can I help?
+
+        user:
+        How do I cancel my subscription?
+
+        assistant:
+        Go to account settings and click "Cancel Subscription".
+
+        user:
+        Great! Thank you for your help.
+
+        analysis:
+        [user greeting](#NEUTRAL)
+        [user reports account issues](#NEGATIVE)
+        [user expresses satisfaction](#POSITIVE)
+        [DONE]
+
+        ### Example 2
+
+        user:
+        Where are the bath towels?
+
+        assistant:
+        In the bathroom.
+
+        user:
+        Please send extra towels to my room.
+
+        assistant:
+        I'll send extra towels right away.
+
+        user:
+        Thank you.
+
+        analysis:
+        [user asks about towel location](#NEUTRAL)
+        [user requests extra towels](#NEUTRAL)
+        [user expresses gratitude](#POSITIVE)
+        [DONE]
+
+        ## Input Chat History
+
+        {{ messages_instructions }}
+
+        analysis:
         """  # noqa: E501
     )
 
-    async def run(
+    async def analyze_sentiment_metrics(
         self,
         messages: list["Message"],
         *,
@@ -51,8 +121,12 @@ class UserSatisfactionSurveyAgent:
     ) -> "UserSatisfactionSurveyResult":
         chat_model = self._to_chat_model(model)
 
-        agent_instructions_template = jinja2.Template(self.instructions)
-        user_input = agent_instructions_template.render()
+        agent_instructions_template = jinja2.Template(
+            self.agent_instructions_sentiment_metrics
+        )
+        user_input = agent_instructions_template.render(
+            messages_instructions=Message.to_messages_instructions(messages),
+        )
 
         if verbose:
             __rich_panel = rich.panel.Panel(
@@ -95,12 +169,12 @@ class UserSatisfactionSurveyAgent:
             messages=messages,
             usage=usage,
             sentiment_metrics=self._parse_sentiment_metrics(result.final_output),
-            customer_effort_metrics=self._parse_customer_effort_metrics(
-                result.final_output
-            ),
-            semantic_cohesion_metric=self._parse_semantic_cohesion_metric(
-                result.final_output
-            ),
+            # customer_effort_metrics=self._parse_customer_effort_metrics(
+            #     result.final_output
+            # ),
+            # semantic_cohesion_metric=self._parse_semantic_cohesion_metric(
+            #     result.final_output
+            # ),
         )
 
     def _parse_sentiment_metrics(self, text: str) -> "SentimentMetrics":
@@ -171,9 +245,9 @@ class UserSatisfactionSurveyResult(pydantic.BaseModel):
     sentiment_metrics: SentimentMetrics = pydantic.Field(
         description="The sentiment metrics of the customer's conversation."
     )
-    customer_effort_metrics: CustomerEffortMetrics = pydantic.Field(
-        description="The customer effort metrics of the customer's conversation."
-    )
-    semantic_cohesion_metric: SemanticCohesionMetric = pydantic.Field(
-        description="The semantic cohesion metric of the customer's conversation."
-    )
+    # customer_effort_metrics: CustomerEffortMetrics = pydantic.Field(
+    #     description="The customer effort metrics of the customer's conversation."
+    # )
+    # semantic_cohesion_metric: SemanticCohesionMetric = pydantic.Field(
+    #     description="The semantic cohesion metric of the customer's conversation."
+    # )
