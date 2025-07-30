@@ -1,0 +1,7 @@
+annotated-types==0.7.0 ; python_version >= "3.11" and python_version < "4"
+dictpress==0.3.0 ; python_version >= "3.11" and python_version < "4"
+pydantic-core==2.33.2 ; python_version >= "3.11" and python_version < "4"
+pydantic==2.11.7 ; python_version >= "3.11" and python_version < "4"
+str-or-none==0.1.0 ; python_version >= "3.11" and python_version < "4"
+typing-extensions==4.14.1 ; python_version >= "3.11" and python_version < "4"
+typing-inspection==0.4.1 ; python_version >= "3.11" and python_version < "4"
