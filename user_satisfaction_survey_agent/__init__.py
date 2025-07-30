@@ -31,7 +31,7 @@ class UserSatisfactionSurveyAgent:
         """  # noqa: E501
     )
 
-    async def analyze_rules_and_memories(
+    async def run(
         self,
         messages: list["Message"],
         *,
