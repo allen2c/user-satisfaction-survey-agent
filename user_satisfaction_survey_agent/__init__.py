@@ -11,6 +11,7 @@ import pydantic
 import rich.console
 import rich.panel
 from openai.types import ChatModel
+from rich.text import Text as RichText
 from rich_color_support import RichColorRotator
 
 from user_satisfaction_survey_agent._message import Message
@@ -65,9 +66,9 @@ class UserSatisfactionSurveyAgent:
         Great! Thank you for your help.
 
         analysis:
-        [user greeting](#NEUTRAL)
-        [user reports account issues](#NEGATIVE)
-        [user expresses satisfaction](#POSITIVE)
+        sentiment: [user greeting](#NEUTRAL)
+        sentiment: [user reports account issues](#NEGATIVE)
+        sentiment: [user expresses satisfaction](#POSITIVE)
         [DONE]
 
         ### Example 2
@@ -88,9 +89,9 @@ class UserSatisfactionSurveyAgent:
         Thank you.
 
         analysis:
-        [user asks about towel location](#NEUTRAL)
-        [user requests extra towels](#NEUTRAL)
-        [user expresses gratitude](#POSITIVE)
+        sentiment: [user asks about towel location](#NEUTRAL)
+        sentiment: [user requests extra towels](#NEUTRAL)
+        sentiment: [user expresses gratitude](#POSITIVE)
         [DONE]
 
         ## Input Chat History
@@ -130,7 +131,7 @@ class UserSatisfactionSurveyAgent:
 
         if verbose:
             __rich_panel = rich.panel.Panel(
-                user_input,
+                RichText(user_input),
                 title="LLM INSTRUCTIONS",
                 border_style=color_rotator.pick(),
                 width=width,
@@ -151,7 +152,7 @@ class UserSatisfactionSurveyAgent:
 
         if verbose:
             __rich_panel = rich.panel.Panel(
-                str(result.final_output),
+                RichText(str(result.final_output)),
                 title="LLM OUTPUT",
                 border_style=color_rotator.pick(),
                 width=width,
